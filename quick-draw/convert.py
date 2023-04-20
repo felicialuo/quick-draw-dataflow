@@ -1,6 +1,6 @@
 '''
 Example commands to run this file and get .png from GCS:
-python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/owl/ --imglabel owl
+python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/bb/ --imglabel blueberry
 '''
 
 import argparse, json, io, base64, sys, uuid
@@ -17,7 +17,7 @@ import numpy as np
 
 
 class EncodeFn(beam.DoFn):
-    def process(self, element, img_size=256, lw=3):
+    def process(self, element, img_size=96, lw=3):
         img = Image.new('RGB', (img_size, img_size), (255,255,255))
         draw = ImageDraw.Draw(img)
         element['drawing'] = [np.array(stroke) for stroke in element['drawing']]
@@ -26,7 +26,7 @@ class EncodeFn(beam.DoFn):
             for stroke in element['drawing']
             for i in range(stroke.shape[1] - 1)
         ], dtype=np.float32)
-        lines /= 1024
+        lines /= 256
         for line in lines:
             draw.line(tuple(line.T.reshape((-1,)) * img_size), fill='black', width=lw)
         b = io.BytesIO()
