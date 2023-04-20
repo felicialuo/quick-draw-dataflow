@@ -1,10 +1,15 @@
 # 'Quick, Draw!' Dataset Playground
 
-The main idea of this example is to use Dataflow to explore the [Quick, Draw!](https://towardsdatascience.com/quick-draw-the-worlds-largest-doodle-dataset-823c22ffce6b) dataset. This is a Google initiative to collect user-made doodles belonging to different categories such as places, animals, etc. It can be accessed through the [GitHub page](https://github.com/googlecreativelab/quickdraw-dataset) and it's also hosted on a public [GCS Bucket](https://console.cloud.google.com/storage/browser/quickdraw_dataset). Projects revolving around this dataset have been focused on Machine Learning and trying to predict what is being sketched (see the game [here](https://quickdraw.withgoogle.com/#)). In our case, we are going to focus on the [owl drawings'](https://quickdraw.withgoogle.com/data/owl) raw data, convert them to images and save them in `png` format (147,654 files). We'll use the Python SDK for the convenience to use libraries such as `json` or `Pillow`.
+Refer to the [original repository](https://github.com/gxercavins/dataflow-samples/tree/master/quick-draw) for instructions running this code in GCP.
+
+The main idea of this example is to use Dataflow to explore the [Quick, Draw!](https://towardsdatascience.com/quick-draw-the-worlds-largest-doodle-dataset-823c22ffce6b) dataset. This is a Google initiative to collect user-made doodles belonging to different categories such as places, animals, etc. It can be accessed through the [GitHub page](https://github.com/googlecreativelab/quickdraw-dataset) and it's also hosted on a public [GCS Bucket](https://console.cloud.google.com/storage/browser/quickdraw_dataset). Projects revolving around this dataset have been focused on Machine Learning and trying to predict what is being sketched (see the game [here](https://quickdraw.withgoogle.com/#)). In our case, we are going to focus on the [owl drawings'](https://quickdraw.withgoogle.com/data/owl) raw data, convert them to images and save them in `png` format (147,654 files). The workflow was tested in a local environment.
 
 ![screenshot from 2018-09-02 20-16-55](https://user-images.githubusercontent.com/29493411/44959774-8fa4de00-aef4-11e8-9516-448117a52ebc.png)
 
 ## Quickstart
+
+Before running the code locally, [install and initialize the gcloud CLI](https://cloud.google.com/sdk/docs/install), if you haven't already.
+Then follow the instructions to [set up application default credentials in local development environment](https://cloud.google.com/docs/authentication/provide-credentials-adc#local-dev).
 
 Set up [authentication](https://cloud.google.com/docs/authentication/) your preferred way and install the following Python packages 
 
@@ -19,12 +24,9 @@ pip install pillow
 
 To test the script locally, pass in the output folder directory `--output` and the image label to draw from the dataset `--imglabel`
 ```
-python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/apple/ --imglabel apple
+python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/owl/ --imglabel owl
 ```
-This will draw all images under the given label from the full simplified .ndjson file. 
-
-To run on Google Cloud Platform set up the `PROJECT` and `BUCKET` env variables and execute: `python convert.py --runner DataflowRunner --temp_location gs://$BUCKET/temp --project $PROJECT --output gs://$BUCKET/owls/images/`.
-As of now, Dataflow workers have `numpy==1.13.3` and `pillow==3.4.1` already installed as [extra dependencies](https://cloud.google.com/dataflow/docs/concepts/sdk-worker-dependencies#sdk-for-python) so there is no need to use the `--requirements_file` flag.
+This will draw all images under the given label from the full simplified .ndjson file. Since the full owl data will generate 147,654 png files, Mac users can use `Ctrl+C` to early kill the process.
 
 This code was tested with 
 ```
