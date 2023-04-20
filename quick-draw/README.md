@@ -1,6 +1,6 @@
 # 'Quick, Draw!' Dataset Playground
 
-Refer to the [original repository](https://github.com/gxercavins/dataflow-samples/tree/master/quick-draw) for instructions running this code in GCP.
+Refer to the [original repository](https://github.com/gxercavins/dataflow-samples/tree/master/quick-draw) for instructions running this code on GCP.
 
 The main idea of this example is to use Dataflow to explore the [Quick, Draw!](https://towardsdatascience.com/quick-draw-the-worlds-largest-doodle-dataset-823c22ffce6b) dataset. This is a Google initiative to collect user-made doodles belonging to different categories such as places, animals, etc. It can be accessed through the [GitHub page](https://github.com/googlecreativelab/quickdraw-dataset) and it's also hosted on a public [GCS Bucket](https://console.cloud.google.com/storage/browser/quickdraw_dataset). Projects revolving around this dataset have been focused on Machine Learning and trying to predict what is being sketched (see the game [here](https://quickdraw.withgoogle.com/#)). In our case, we are going to focus on the [owl drawings'](https://quickdraw.withgoogle.com/data/owl) raw data, convert them to images and save them in `png` format (147,654 files). The workflow was tested in a local environment.
 
