@@ -1,6 +1,6 @@
 '''
 Example commands to run this file and get .png from GCS:
-python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/bl/ --imglabel blueberry
+python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/owl/ --imglabel owl
 '''
 
 import argparse, json, io, base64, sys, uuid
