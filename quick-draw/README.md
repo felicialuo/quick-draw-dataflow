@@ -17,7 +17,7 @@ pip install numpy
 pip install pillow
 ```
 
-To test the script locally, pass in the output folder directory `--output` and the image label to draw from the dataset `--label`
+To test the script locally, pass in the output folder directory `--output` and the image label to draw from the dataset `--imglabel`
 ```
 python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/apple/ --imglabel apple
 ```
