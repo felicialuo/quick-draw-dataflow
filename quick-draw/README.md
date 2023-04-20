@@ -6,20 +6,32 @@ The main idea of this example is to use Dataflow to explore the [Quick, Draw!](h
 
 ## Quickstart
 
-Set up [authentication](https://cloud.google.com/docs/authentication/) your preferred way and install the following Python packages (use of `virtualenv` is recommended):
-* `pip install apache-beam`
-* `pip install apache-beam[gcp]`
-* `pip install numpy`
-* `pip install pillow`
+Set up [authentication](https://cloud.google.com/docs/authentication/) your preferred way and install the following Python packages 
 
-Alternatively, install from the `requirements.txt` file provided with: `pip install -r requirements.txt`
+```
+conda create -n quick-draw python=3.7
+conda activate quick-draw
+pip install apache-beam
+pip install apache-beam[gcp]
+pip install numpy
+pip install pillow
+```
 
-To test the script locally, provide an output file: `python convert.py --output output.txt`.
+To test the script locally, pass in the output folder directory `--output` and the image label to draw from the dataset `--label`
+```
+python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/apple/ --imglabel apple
+```
+This will draw all images under the given label from the full simplified .ndjson file. 
 
 To run on Google Cloud Platform set up the `PROJECT` and `BUCKET` env variables and execute: `python convert.py --runner DataflowRunner --temp_location gs://$BUCKET/temp --project $PROJECT --output gs://$BUCKET/owls/images/`.
 As of now, Dataflow workers have `numpy==1.13.3` and `pillow==3.4.1` already installed as [extra dependencies](https://cloud.google.com/dataflow/docs/concepts/sdk-worker-dependencies#sdk-for-python) so there is no need to use the `--requirements_file` flag.
 
-This code was tested with `apache-beam==2.6.0`.
+This code was tested with 
+```
+python==3.7.16
+numpy==1.21.6
+apache-beam==2.46.0
+```
 
 ## Example
 
