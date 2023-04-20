@@ -1,3 +1,8 @@
+'''
+Example commands to run this file and get .png from GCS:
+python convert.py --output /Users/felicialuo/Documents/hyperSense_local/dataset/bl/ --imglabel blueberry
+'''
+
 import argparse, json, io, base64, sys, uuid
 
 import apache_beam as beam
@@ -12,7 +17,7 @@ import numpy as np
 
 
 class EncodeFn(beam.DoFn):
-    def process(self, element, img_siz=128, lw=3):
+    def process(self, element, img_size=256, lw=3):
         img = Image.new('RGB', (img_size, img_size), (255,255,255))
         draw = ImageDraw.Draw(img)
         element['drawing'] = [np.array(stroke) for stroke in element['drawing']]
@@ -31,6 +36,7 @@ class EncodeFn(beam.DoFn):
 class WriteToSeparateFiles(beam.DoFn):
     def __init__(self, outdir):
         self.outdir = outdir
+        # self.outdir = '/Users/felicialuo/Documents/hyperSense_local/dataset/cat/'
     def process(self, element):
         writer = filesystems.FileSystems.create(self.outdir + element['key_id'] + '.png')
         writer.write(element['image'])
@@ -39,9 +45,11 @@ class WriteToSeparateFiles(beam.DoFn):
 def run(argv=None):
   parser = argparse.ArgumentParser()
   parser.add_argument('--output',
-                      dest='output',
                       required=True,
-                      help='GCS destination folder to save the images to (example: gs://BUCKET_NAME/path/to/images/')
+                      help='destination folder to save the images to (example: /Users/felicialuo/Documents/hyperSense_local/dataset/cat/')
+  parser.add_argument('--imglabel',
+                      required=True,
+                      help='what label of images to draw from QuickDraw dataset (example: cat)')
   known_args, pipeline_args = parser.parse_known_args(argv)
 
   # Use save_main_session option because EncodeFn relies on global context (Image module imported)
@@ -49,7 +57,8 @@ def run(argv=None):
   pipeline_options.view_as(SetupOptions).save_main_session = True
   p = beam.Pipeline(options=pipeline_options)
 
-  input = p | 'Read files' >> ReadFromText("gs://quickdraw_dataset/full/raw/owl.ndjson")
+  input = p | 'Read files' >> ReadFromText("gs://quickdraw_dataset/full/simplified/"+known_args.imglabel+".ndjson")
+#   input = p | 'Read files' >> ReadFromText("gs://quickdraw_dataset/full/simplified/alarm clock.ndjson")
   jsons = input | 'Load into JSON' >> beam.Map(lambda x: json.loads(x))
   b64 = jsons | 'Convert to images' >> beam.ParDo(EncodeFn())
   b64 | 'Save images' >> beam.ParDo(WriteToSeparateFiles(known_args.output))
